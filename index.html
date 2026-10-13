@@ -44,10 +44,66 @@ a.l:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(236,72,153,.22)
 .qr-tabs button.act{background:linear-gradient(135deg,var(--ac1),var(--ac2));color:#fff;border-color:transparent}
 .qr-link{display:inline-block;margin-top:14px;padding:10px 20px;border-radius:999px;background:linear-gradient(135deg,var(--ac1),var(--ac2));color:#fff;font-weight:600;font-size:14px;text-decoration:none;box-shadow:var(--sh)}
 .qr-link[hidden]{display:none}
+.qr-copy{display:block;margin:14px auto 0;border:0;background:linear-gradient(135deg,var(--ac1),var(--ac2));color:#fff;font:600 14px 'Be Vietnam Pro',sans-serif;padding:11px 22px;border-radius:999px;cursor:pointer;box-shadow:var(--sh)}
+#zl .qr-link{background:var(--card);color:var(--tx);border:1px solid var(--bd);box-shadow:none}
 
 footer{margin-top:36px;font-size:12px;color:var(--sub)}
 </style>
 </head>
+<div id="zl" class="qr" hidden>
+  <div class="qr-box" role="dialog" aria-modal="true">
+    <button class="qr-x" id="zlx" aria-label="Đóng">✕</button>
+    <h3>Liên hệ qua Zalo</h3>
+    <p id="zln"></p>
+    <button id="zlc" class="qr-copy" type="button"></button>
+    <a id="zlo" class="qr-link" href="#">Thử mở Zalo →</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  if (!/TikTok|musical_ly|Bytedance|FBAN|FBAV|Instagram/i.test(navigator.userAgent)) return;
+
+  var m = document.getElementById('zl'),
+      n = document.getElementById('zln'),
+      c = document.getElementById('zlc'),
+      o = document.getElementById('zlo');
+
+  function close() { m.hidden = true; document.body.style.overflow = ''; }
+
+  document.querySelectorAll('a.l[href*="zalo.me"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var group = /zalo\.me\/g\//.test(a.href);
+      c.dataset.v = group ? a.href : '0366822535';
+      c.textContent = group ? 'Sao chép link nhóm' : 'Sao chép số Zalo';
+      n.textContent = group
+        ? 'Trình duyệt TikTok chặn mở Zalo. Hãy sao chép link nhóm, mở Zalo rồi dán vào ô tin nhắn hoặc tìm kiếm để tham gia.'
+        : 'Trình duyệt TikTok chặn mở Zalo. Hãy sao chép số 0366822535, mở Zalo rồi dán vào ô tìm kiếm để nhắn tin.';
+      o.href = a.href;
+      m.hidden = false;
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  c.addEventListener('click', function () {
+    var v = c.dataset.v;
+    function ok() { c.textContent = 'Đã sao chép ✓'; }
+    function fb() {
+      var t = document.createElement('textarea');
+      t.value = v; document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); ok(); } catch (e) {}
+      t.remove();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(v).then(ok).catch(fb);
+    } else { fb(); }
+  });
+
+  document.getElementById('zlx').addEventListener('click', close);
+  m.addEventListener('click', function (e) { if (e.target === m) close(); });
+})();
+</script>
 <body>
 <div class="wrap">
   <div class="av">
