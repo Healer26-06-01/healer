@@ -76,8 +76,7 @@ footer{margin-top:36px;font-size:12px;color:var(--sub)}
   </div>
   <footer>© Healer</footer>
 </div>
-<!-- <button id="mb" aria-label="Bật/tắt nhạc">🔇</button> -->
-<audio id="bgm" src="music.mp3" loop preload="auto"></audio>
+
 
 <div id="qr" class="qr" hidden>
   <div class="qr-box" role="dialog" aria-modal="true" aria-label="Mã QR donate">
@@ -92,35 +91,6 @@ footer{margin-top:36px;font-size:12px;color:var(--sub)}
 </div>
 
 <script>
-(function () {
-  var a = document.getElementById('bgm'),
-      btn = document.getElementById('mb'),
-      evs = ['pointerup', 'touchend', 'click', 'keydown'];
-  a.volume = 0.5; // âm lượng 0 → 1
-
-  function ui() {
-    var p = !a.paused;
-    btn.textContent = p ? '🔊' : '🔇';
-    btn.className = p ? 'on' : '';
-  }
-  function play() { a.play().then(ui).catch(function () {}); }
-
-  btn.addEventListener('click', function () {
-    a.paused ? play() : a.pause();
-  });
-  a.addEventListener('play', ui);
-  a.addEventListener('pause', ui);
-
-  // Nếu trình duyệt chặn tự phát, nhạc sẽ chạy ở lần chạm/bấm đầu tiên
-  function first(e) {
-    if (e.target.closest && e.target.closest('#mb')) return;
-    play();
-    evs.forEach(function (t) { document.removeEventListener(t, first, true); });
-  }
-  evs.forEach(function (t) { document.addEventListener(t, first, true); });
-
-  play(); // thử tự phát ngay khi mở trang
-})();
 
 
 (function () {
