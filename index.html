@@ -173,19 +173,6 @@ footer b{background:linear-gradient(90deg,var(--ac1),var(--ac2));-webkit-backgro
   font:600 13px 'Be Vietnam Pro',sans-serif;cursor:pointer;transition:.2s}
 .copybtn:hover{border-color:var(--ac3);transform:translateY(-2px)}
 .copybtn:active{transform:scale(.97)}
-/* ===== huy hiệu đếm lượt bấm (chỉ hiện ở chế độ thống kê) ===== */
-.stat{position:absolute;left:50%;top:-11px;transform:translateX(-50%);z-index:2;
-  font-size:10px;font-weight:700;white-space:nowrap;color:#fff;flex:none;
-  background:linear-gradient(135deg,var(--ac1),var(--ac2));
-  padding:4px 11px;border-radius:999px;box-shadow:0 4px 12px rgba(0,0,0,.25);display:none}
-body.stats .stat{display:block;position:static;transform:none;margin-left:6px}
-body.stats .go{display:none}
-/* ===== nút bật/tắt xem lượt bấm ===== */
-#statToggle{margin-top:10px;border:1px solid var(--bd);background:var(--card);color:var(--sub);
-  font:600 11px 'Be Vietnam Pro',sans-serif;padding:7px 14px;border-radius:999px;cursor:pointer;
-  letter-spacing:.4px;transition:.2s}
-#statToggle:hover{border-color:var(--ac3);color:var(--tx)}
-body.stats #statToggle{color:var(--tx);border-color:var(--ac3)}
 /* ===== toast ===== */
 #toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));z-index:70;
   transform:translateX(-50%) translateY(16px);background:var(--tx);color:var(--bg1);
@@ -226,7 +213,7 @@ body.stats #statToggle{color:var(--tx);border-color:var(--ac3)}
       <span class="t">Donate / quét mã QR</span><span class="go">→</span></a>
     <a class="l" href="https://www.facebook.com/healerisme01/"><span class="ic f"><svg viewBox="0 0 24 24"><path d="M14 8V6.500c0-.7.200-1 1.200-1H17V2h-2.700C11.500 2 10 3.700 10 6v2H8v3.500h2V22h4v-10.500h2.700L17 8z"/></svg></span><span class="t">Facebook</span><span class="go">→</span></a>
   </div>
-  <footer class="rise">© <b>Healer</b> · Cảm ơn bạn đã ghé thăm 💜<br><button id="statToggle">📊 Xem lượt bấm</button></footer>
+  <footer class="rise">© <b>Healer</b> · Cảm ơn bạn đã ghé thăm 💜</footer>
 </div>
 
 <div id="qr" class="qr" hidden>
@@ -376,40 +363,6 @@ body.stats #statToggle{color:var(--tx);border-color:var(--ac3)}
   document.querySelectorAll('.copybtn').forEach(function (b) {
     b.addEventListener('click', function () { copyText(b.getAttribute('data-copy')); });
   });
-  /* ---------- đếm lượt bấm trên máy này (bấm nút 📊 ở cuối trang để xem) ---------- */
-  var CK = 'healer-clicks-v1';
-  function getCounts() { try { return JSON.parse(localStorage.getItem(CK)) || {}; } catch (e) { return {}; } }
-  function refreshStats() {
-    var c = getCounts();
-    document.querySelectorAll('.stat').forEach(function (s) {
-      var n = c[s.getAttribute('data-for')] || 0;
-      s.textContent = n + ' lượt bấm';
-    });
-  }
-  document.querySelectorAll('a.l').forEach(function (a, i) {
-    var id = a.id || ('link' + i);
-    var badge = document.createElement('span');
-    badge.className = 'stat'; badge.setAttribute('data-for', id);
-    a.appendChild(badge);
-    a.addEventListener('click', function () {
-      var c = getCounts(); c[id] = (c[id] || 0) + 1;
-      try { localStorage.setItem(CK, JSON.stringify(c)); } catch (e) {}
-      refreshStats();
-    });
-  });
-  refreshStats();
-  var stBtn = document.getElementById('statToggle');
-  function setStats(on) {
-    document.body.classList.toggle('stats', on);
-    stBtn.textContent = on ? '📊 Ẩn lượt bấm' : '📊 Xem lượt bấm';
-    refreshStats();
-  }
-  stBtn.addEventListener('click', function () {
-    var on = !document.body.classList.contains('stats');
-    setStats(on);
-    toast(on ? 'Đã bật xem thống kê lượt bấm' : 'Đã tắt xem thống kê');
-  });
-  if (location.hash === '#stats') { setStats(true); }
 })();
 </script>
 
