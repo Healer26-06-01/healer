@@ -4,80 +4,203 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Làm chung sức ib zalo</title>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg1:#e0f2fe;--bg2:#fce7f3;--card:rgba(255,255,255,.7);--bd:rgba(255,255,255,.9);--tx:#1e1b4b;--sub:#6b7280;--ac1:#6366f1;--ac2:#ec4899;--sh:0 8px 24px rgba(99,102,241,.15)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#0f172a;--bg2:#2e1065;--card:rgba(255,255,255,.07);--bd:rgba(255,255,255,.14);--tx:#f8fafc;--sub:#a5b4fc;--sh:0 8px 24px rgba(0,0,0,.35)}}
-:root[data-theme="dark"]{--bg1:#0f172a;--bg2:#2e1065;--card:rgba(255,255,255,.07);--bd:rgba(255,255,255,.14);--tx:#f8fafc;--sub:#a5b4fc;--sh:0 8px 24px rgba(0,0,0,.35)}
+@property --ar{syntax:'<angle>';initial-value:0deg;inherits:false}
+:root{
+  --bg1:#dbeafe;--bg2:#fae8ff;--bg3:#e0e7ff;
+  --card:rgba(255,255,255,.65);--bd:rgba(255,255,255,.85);
+  --tx:#1e1b4b;--sub:#64748b;
+  --ac1:#6366f1;--ac2:#ec4899;--ac3:#8b5cf6;
+  --sh:0 10px 30px rgba(99,102,241,.16);
+  --sh-h:0 18px 44px rgba(139,92,246,.28);
+  --orb-o:.55;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg1:#0b1120;--bg2:#1e1b4b;--bg3:#0f172a;
+  --card:rgba(255,255,255,.06);--bd:rgba(255,255,255,.12);
+  --tx:#f1f5f9;--sub:#a5b4fc;
+  --sh:0 10px 30px rgba(0,0,0,.45);--sh-h:0 18px 44px rgba(139,92,246,.35);
+  --orb-o:.4;
+}}
+:root[data-theme="dark"]{
+  --bg1:#0b1120;--bg2:#1e1b4b;--bg3:#0f172a;
+  --card:rgba(255,255,255,.06);--bd:rgba(255,255,255,.12);
+  --tx:#f1f5f9;--sub:#a5b4fc;
+  --sh:0 10px 30px rgba(0,0,0,.45);--sh-h:0 18px 44px rgba(139,92,246,.35);
+  --orb-o:.4;
+}
 *{box-sizing:border-box;margin:0}
 html{height:100%}
-body{min-height:100%;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--tx);background:linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;padding:calc(env(safe-area-inset-top,0px) + 48px) 20px calc(env(safe-area-inset-bottom,0px) + 40px)}
-.wrap{max-width:480px;margin:0 auto;text-align:center}
-.av{width:104px;height:104px;margin:0 auto 16px;border-radius:50%;padding:3px;background:linear-gradient(135deg,var(--ac1),var(--ac2));box-shadow:0 0 0 6px rgba(99,102,241,.12),var(--sh)}
-.av div{width:100%;height:100%;border-radius:50%;background:var(--bg1);display:grid;place-items:center;font-size:40px;overflow:hidden}
+body{
+  min-height:100%;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--tx);
+  background:linear-gradient(155deg,var(--bg1),var(--bg3) 45%,var(--bg2));
+  background-attachment:fixed;overflow-x:hidden;
+  padding:calc(env(safe-area-inset-top,0px) + 56px) 20px calc(env(safe-area-inset-bottom,0px) + 44px);
+}
+::selection{background:rgba(139,92,246,.3)}
+/* ===== nền aurora ===== */
+.orbs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.orbs span{position:absolute;border-radius:50%;filter:blur(90px);opacity:var(--orb-o);animation:drift 14s ease-in-out infinite alternate}
+.orbs span:nth-child(1){width:340px;height:340px;left:-90px;top:-70px;background:#a78bfa}
+.orbs span:nth-child(2){width:300px;height:300px;right:-80px;top:32%;background:#f9a8d4;animation-delay:-5s}
+.orbs span:nth-child(3){width:280px;height:280px;left:12%;bottom:-100px;background:#93c5fd;animation-delay:-9s}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(46px,34px) scale(1.12)}}
+/* ===== khung ===== */
+.wrap{max-width:480px;margin:0 auto;text-align:center;position:relative}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.rise{animation:rise .7s cubic-bezier(.22,1,.36,1) both}
+.d1{animation-delay:.05s}.d2{animation-delay:.12s}.d3{animation-delay:.19s}
+.list a.l:nth-child(1){animation-delay:.24s}.list a.l:nth-child(2){animation-delay:.30s}
+.list a.l:nth-child(3){animation-delay:.36s}.list a.l:nth-child(4){animation-delay:.42s}
+.list a.l:nth-child(5){animation-delay:.48s}.list a.l:nth-child(6){animation-delay:.54s}
+.list a.l:nth-child(7){animation-delay:.60s}
+footer.rise{animation-delay:.68s}
+/* ===== avatar ===== */
+.av{position:relative;width:112px;height:112px;margin:0 auto 18px}
+.av::before{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  background:conic-gradient(from var(--ar),var(--ac1),var(--ac2),var(--ac3),var(--ac1));
+  animation:spin 5s linear infinite;
+}
+@keyframes spin{to{--ar:360deg}}
+.av::after{
+  content:'';position:absolute;inset:6px;border-radius:50%;z-index:-1;
+  background:linear-gradient(135deg,var(--ac1),var(--ac2));filter:blur(22px);opacity:.5;
+}
+.av div{position:relative;width:100%;height:100%;border-radius:50%;background:var(--bg1);
+  display:grid;place-items:center;font-size:42px;overflow:hidden;border:4px solid transparent;
+  background-clip:padding-box}
 .av img{width:100%;height:100%;object-fit:cover}
-.av{position:relative}
-.vf{position:absolute;right:-2px;bottom:2px;width:30px;height:30px;filter:drop-shadow(0 2px 6px rgba(14,116,244,.45))}
-h1{font-size:21px;font-weight:700;background:linear-gradient(90deg,var(--ac1),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
-p.s{margin-top:6px;font-size:14px;color:var(--sub)}
-.list{margin-top:36px;display:grid;gap:14px}
-a.l{display:flex;align-items:center;gap:14px;padding:12px 18px 12px 12px;border-radius:18px;background:var(--card);border:1px solid var(--bd);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--sh);color:var(--tx);text-decoration:none;font-weight:600;font-size:15px;transition:transform .2s,box-shadow .2s}
-a.l:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(236,72,153,.22)}
-.ic{flex:none;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;color:#fff}
+.vf{position:absolute;right:0;bottom:4px;width:32px;height:32px;z-index:2;
+  filter:drop-shadow(0 3px 8px rgba(14,116,244,.5))}
+/* ===== tiêu đề ===== */
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--sub);
+  background:var(--card);border:1px solid var(--bd);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  padding:7px 14px;border-radius:999px;margin-bottom:14px;box-shadow:var(--sh)}
+.badge i{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.18);animation:blink 1.8s infinite}
+@keyframes blink{50%{opacity:.55}}
+h1{font-size:24px;font-weight:800;letter-spacing:-.3px;
+  background:linear-gradient(92deg,var(--ac1),var(--ac2) 60%,var(--ac3));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+p.s{margin-top:8px;font-size:14px;color:var(--sub)}
+/* ===== nút liên kết ===== */
+.list{margin-top:34px;display:grid;gap:14px}
+a.l{
+  position:relative;display:flex;align-items:center;gap:14px;overflow:hidden;
+  padding:13px 18px 13px 13px;border-radius:20px;
+  background:var(--card);border:1px solid var(--bd);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:var(--sh);color:var(--tx);text-decoration:none;font-weight:600;font-size:15px;
+  transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s,border-color .25s;
+  animation:rise .7s cubic-bezier(.22,1,.36,1) both;
+}
+a.l::after{ /* vệt sáng quét qua khi hover */
+  content:'';position:absolute;top:0;left:-90%;width:55%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.4),transparent);
+  transform:skewX(-20deg);transition:left .65s ease;pointer-events:none;
+}
+a.l:hover{transform:translateY(-4px) scale(1.015);box-shadow:var(--sh-h);border-color:rgba(139,92,246,.45)}
+a.l:hover::after{left:140%}
+a.l:active{transform:translateY(-1px) scale(.99)}
+.ic{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 6px 14px rgba(0,0,0,.18);
+  transition:transform .25s}
+a.l:hover .ic{transform:scale(1.1) rotate(-4deg)}
 .ic svg{width:24px;height:24px;fill:currentColor}
-.t{flex:1;text-align:center;padding-right:44px}
-.z{background:linear-gradient(135deg,#1a8cff,#0068ff)}.zt{font-size:13px;font-weight:800;letter-spacing:-.3px;font-style:italic}.y{background:linear-gradient(135deg,#f43f5e,#dc2626)}.k{background:linear-gradient(135deg,#111827,#374151)}.d{background:linear-gradient(135deg,#818cf8,#4f46e5)}.g{background:linear-gradient(135deg,#f59e0b,#ec4899)}.f{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
-#mb{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:48px;height:48px;border-radius:50%;border:1px solid var(--bd);background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--sh);font-size:21px;cursor:pointer;display:grid;place-items:center;color:var(--tx)}
-#mb.on{background:linear-gradient(135deg,var(--ac1),var(--ac2));animation:pl 2s ease-in-out infinite}
-@keyframes pl{50%{box-shadow:0 0 0 10px rgba(236,72,153,.18)}}
-
-.qr{position:fixed;inset:0;z-index:50;background:rgba(15,23,42,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:grid;place-items:center;padding:calc(env(safe-area-inset-top,0px) + 20px) 20px calc(env(safe-area-inset-bottom,0px) + 20px)}
+.t{flex:1;text-align:center;padding-right:46px}
+.go{position:absolute;right:16px;color:var(--sub);opacity:0;transform:translateX(-10px);transition:.25s;font-weight:700}
+a.l:hover .go{opacity:1;transform:none}
+a.l:focus-visible{outline:2px solid var(--ac3);outline-offset:3px}
+.z{background:linear-gradient(135deg,#1a8cff,#0068ff)}
+.zt{font-size:13px;font-weight:800;letter-spacing:-.3px;font-style:italic}
+.y{background:linear-gradient(135deg,#f43f5e,#dc2626)}
+.k{background:linear-gradient(135deg,#111827,#4b5563)}
+.d{background:linear-gradient(135deg,#818cf8,#4f46e5)}
+.g{background:linear-gradient(135deg,#f59e0b,#ec4899)}
+.f{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
+/* ===== nút đổi giao diện ===== */
+#mb{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:16px;z-index:40;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--bd);cursor:pointer;
+  background:var(--card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:var(--sh);display:grid;place-items:center;color:var(--tx);
+  transition:transform .25s,box-shadow .25s}
+#mb:hover{transform:rotate(18deg) scale(1.08);box-shadow:var(--sh-h)}
+#mb svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+#mb .moon{display:none}
+:root[data-theme="dark"] #mb .sun{display:none}
+:root[data-theme="dark"] #mb .moon{display:block}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) #mb .sun{display:none}
+:root:not([data-theme="light"]) #mb .moon{display:block}}
+/* ===== modal QR ===== */
+.qr{position:fixed;inset:0;z-index:50;background:rgba(15,23,42,.55);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:grid;place-items:center;
+  padding:calc(env(safe-area-inset-top,0px) + 20px) 20px calc(env(safe-area-inset-bottom,0px) + 20px)}
 .qr[hidden]{display:none}
-.qr-box{position:relative;width:100%;max-width:360px;max-height:100%;overflow:auto;text-align:center;padding:24px 20px 20px;border-radius:24px;background:var(--bg1);border:1px solid var(--bd);box-shadow:0 20px 50px rgba(0,0,0,.35);animation:pop .25s ease}
-@keyframes pop{from{opacity:0;transform:scale(.92) translateY(10px)}}
-.qr-box h3{font-size:18px;margin-bottom:14px;background:linear-gradient(90deg,var(--ac1),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.qr-box img{width:100%;max-width:280px;border-radius:16px;background:#fff;padding:10px;box-shadow:var(--sh)}
+.qr-box{position:relative;width:100%;max-width:360px;max-height:100%;overflow:auto;text-align:center;
+  padding:26px 20px 22px;border-radius:26px;background:var(--bg1);border:1px solid var(--bd);
+  box-shadow:0 24px 60px rgba(0,0,0,.4);animation:pop .28s cubic-bezier(.22,1,.36,1)}
+.qr-box::before{content:'';position:absolute;top:0;left:10%;right:10%;height:4px;border-radius:0 0 8px 8px;
+  background:linear-gradient(90deg,var(--ac1),var(--ac2),var(--ac3))}
+@keyframes pop{from{opacity:0;transform:scale(.9) translateY(14px)}}
+.qr-box h3{font-size:19px;font-weight:800;margin-bottom:14px;
+  background:linear-gradient(90deg,var(--ac1),var(--ac2));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.qr-box img{width:100%;max-width:280px;border-radius:18px;background:#fff;padding:10px;box-shadow:var(--sh)}
 .qr-box p{margin-top:12px;font-size:14px;color:var(--sub)}
-.qr-x{position:absolute;top:12px;right:12px;width:34px;height:34px;border:0;border-radius:50%;background:var(--card);color:var(--tx);font-size:15px;cursor:pointer}
+.qr-x{position:absolute;top:12px;right:12px;width:36px;height:36px;border:0;border-radius:50%;
+  background:var(--card);color:var(--tx);font-size:15px;cursor:pointer;transition:transform .2s}
+.qr-x:hover{transform:rotate(90deg)}
 .qr-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
-.qr-tabs button{border:1px solid var(--bd);background:var(--card);color:var(--tx);font:600 13px 'Be Vietnam Pro',sans-serif;padding:8px 14px;border-radius:999px;cursor:pointer}
-.qr-tabs button.act{background:linear-gradient(135deg,var(--ac1),var(--ac2));color:#fff;border-color:transparent}
-.qr-link{display:inline-block;margin-top:14px;padding:10px 20px;border-radius:999px;background:linear-gradient(135deg,var(--ac1),var(--ac2));color:#fff;font-weight:600;font-size:14px;text-decoration:none;box-shadow:var(--sh)}
+.qr-tabs button{border:1px solid var(--bd);background:var(--card);color:var(--tx);
+  font:600 13px 'Be Vietnam Pro',sans-serif;padding:9px 16px;border-radius:999px;cursor:pointer;transition:.2s}
+.qr-tabs button:hover{border-color:var(--ac3)}
+.qr-tabs button.act{background:linear-gradient(135deg,var(--ac1),var(--ac2));color:#fff;border-color:transparent;
+  box-shadow:0 6px 16px rgba(139,92,246,.4)}
+.qr-link{display:inline-block;margin-top:14px;padding:11px 24px;border-radius:999px;
+  background:linear-gradient(135deg,var(--ac1),var(--ac2));color:#fff;font-weight:700;font-size:14px;
+  text-decoration:none;box-shadow:0 8px 20px rgba(139,92,246,.4);transition:transform .2s,box-shadow .2s}
+.qr-link:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(236,72,153,.45)}
 .qr-link[hidden]{display:none}
-
-footer{margin-top:36px;font-size:12px;color:var(--sub)}
+footer{margin-top:38px;font-size:12px;color:var(--sub);letter-spacing:.4px}
+footer b{background:linear-gradient(90deg,var(--ac1),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
 </style>
 </head>
-
 <body>
-<div class="wrap">
-  <div class="av">
-  <div><img src="avatar.jpg" alt="Ảnh đại diện"></div>
-  <svg class="vf" viewBox="0 0 24 24" aria-label="Đã xác minh">
-     <path fill="#1d9bf0" stroke="var(--bg1)" stroke-width="1.5"
-    d="M12 1.8l2.6 1.9 3.2-.1 1 3 2.6 1.9-1 3.1 1 3.1-2.6 1.9-1 3-3.2-.1L12 22.2l-2.6-1.9-3.2.1-1-3-2.6-1.9 1-3.1-1-3.1 2.6-1.9 1-3 3.2.1z"/>
-  <path fill="none" stroke="#fff" stroke-width="2.2"
-    stroke-linecap="round" stroke-linejoin="round"
-    d="M7.8 12.3l3 3 5.5-6"/>
-  </svg>
-</div>
-   <h1>Làm chung sức ib zalo</h1>
-  <p class="s">Liên hệ & theo dõi mình tại đây 👇</p>
-  <div class="list">
-   <a class="l" href="#" id="boxzalo"><span class="ic z"><b class="zt">Zalo</b></span><span class="t">Box zalo chung sức</span></a>
-   <a class="l" href="#" id="zalocn"><span class="ic z"><b class="zt">Zalo</b></span><span class="t">Zalo 0366.8225.35</span></a>
-    <a class="l" href="https://www.youtube.com/@healer2606"><span class="ic y"><svg viewBox="0 0 24 24"><path d="M21.600 7.200a2.500 2.500 0 0 0-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800zM10 15V9l5.200 3z"/></svg></span><span class="t">YouTube</span></a>
-    <a class="l" href="https://www.tiktok.com/@healer._01"><span class="ic k"><svg viewBox="0 0 24 24"><path d="M16.600 3c.3 2.300 1.600 3.700 3.900 3.900v3c-1.400.1-2.600-.3-3.900-1.100v5.500c0 7-7.600 9-10.600 4.100-1.900-3.100-.7-8.500 5.200-8.700v3.200c-.5.100-.9.200-1.300.4-1.200.4-1.900 1.100-1.600 2.400.3 2.600 5.100 3.400 4.700-1.700V3z"/></svg></span><span class="t">Tiktok</span></a>
-    <a class="l" href="https://discord.com/invite/wrnsSvRER9"><span class="ic d"><svg viewBox="0 0 24 24"><path d="M19.300 5.300A17 17 0 0 0 15.100 4l-.5 1a15 15 0 0 0-5.200 0l-.5-1a17 17 0 0 0-4.200 1.300C2 9.300 1.300 13.200 1.600 17a17 17 0 0 0 5.200 2.600l1.100-1.800-1.700-.8.400-.3a12 12 0 0 0 10.200 0l.4.300-1.700.8 1.100 1.800A17 17 0 0 0 22.400 17c.4-4.400-.7-8.300-3.100-11.700zM9 14.700c-1 0-1.800-.9-1.800-2s.8-2 1.800-2 1.800.9 1.800 2-.8 2-1.800 2zm6 0c-1 0-1.800-.9-1.800-2s.8-2 1.800-2 1.800.9 1.800 2-.8 2-1.800 2z"/></svg></span><span class="t">Discord</span></a>
-<a class="l" href="#" id="donate">
-  <span class="ic g"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z"/></svg></span>
-  <span class="t">Donate / quét mã QR</span>
-</a>    
-    <a class="l" href="https://www.facebook.com/healerisme01/"><span class="ic f"><svg viewBox="0 0 24 24"><path d="M14 8V6.500c0-.7.200-1 1.200-1H17V2h-2.700C11.500 2 10 3.700 10 6v2H8v3.500h2V22h4v-10.500h2.700L17 8z"/></svg></span><span class="t">Facebook</span></a>
-  </div>
-  <footer>© Healer</footer>
-</div>
+<div class="orbs" aria-hidden="true"><span></span><span></span><span></span></div>
 
+<button id="mb" aria-label="Đổi giao diện sáng / tối">
+  <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3L19 19M19 5l-1.7 1.7M6.7 17.3L5 19"/></svg>
+  <svg class="moon" viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
+</button>
+
+<div class="wrap">
+  <div class="av rise d1">
+    <div><img src="avatar.jpg" alt="Ảnh đại diện"></div>
+    <svg class="vf" viewBox="0 0 24 24" aria-label="Đã xác minh">
+      <path fill="#1d9bf0" stroke="var(--bg1)" stroke-width="1.5"
+        d="M12 1.8l2.6 1.9 3.2-.1 1 3 2.6 1.9-1 3.1 1 3.1-2.6 1.9-1 3-3.2-.1L12 22.2l-2.6-1.9-3.2.1-1-3-2.6-1.9 1-3.1-1-3.1 2.6-1.9 1-3 3.2.1z"/>
+      <path fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+        d="M7.8 12.3l3 3 5.5-6"/>
+    </svg>
+  </div>
+  <div class="rise d2"><span class="badge"><i></i>Liên Quân Mobile · Chung Sức</span></div>
+  <h1 class="rise d2">Làm chung sức nhắn tin zalo</h1>
+  <p class="s rise d3">Liên hệ &amp; theo dõi mình tại đây 👇</p>
+  <div class="list">
+    <a class="l" href="#" id="boxzalo"><span class="ic z"><b class="zt">Zalo</b></span><span class="t">Box zalo chung sức</span><span class="go">→</span></a>
+    <a class="l" href="#" id="zalocn"><span class="ic z"><b class="zt">Zalo</b></span><span class="t">Zalo 0366.8225.35</span><span class="go">→</span></a>
+    <a class="l" href="https://www.youtube.com/@healer2606"><span class="ic y"><svg viewBox="0 0 24 24"><path d="M21.600 7.200a2.500 2.500 0 0 0-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800zM10 15V9l5.200 3z"/></svg></span><span class="t">YouTube</span><span class="go">→</span></a>
+    <a class="l" href="https://www.tiktok.com/@healer._01"><span class="ic k"><svg viewBox="0 0 24 24"><path d="M16.600 3c.3 2.300 1.600 3.700 3.900 3.900v3c-1.400.1-2.600-.3-3.900-1.100v5.500c0 7-7.600 9-10.600 4.100-1.900-3.100-.7-8.500 5.200-8.700v3.200c-.5.100-.9.200-1.300.4-1.200.4-1.900 1.100-1.600 2.400.3 2.600 5.100 3.400 4.700-1.700V3z"/></svg></span><span class="t">Tiktok</span><span class="go">→</span></a>
+    <a class="l" href="https://discord.com/invite/wrnsSvRER9"><span class="ic d"><svg viewBox="0 0 24 24"><path d="M19.300 5.300A17 17 0 0 0 15.100 4l-.5 1a15 15 0 0 0-5.200 0l-.5-1a17 17 0 0 0-4.200 1.300C2 9.300 1.300 13.200 1.600 17a17 17 0 0 0 5.200 2.600l1.100-1.800-1.700-.8.400-.3a12 12 0 0 0 10.200 0l.4.300-1.700.8 1.100 1.800A17 17 0 0 0 22.400 17c.4-4.400-.7-8.300-3.100-11.700zM9 14.700c-1 0-1.800-.9-1.800-2s.8-2 1.800-2 1.800.9 1.800 2-.8 2-1.800 2zm6 0c-1 0-1.800-.9-1.800-2s.8-2 1.800-2 1.800.9 1.800 2-.8 2-1.800 2z"/></svg></span><span class="t">Discord</span><span class="go">→</span></a>
+    <a class="l" href="#" id="donate">
+      <span class="ic g"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z"/></svg></span>
+      <span class="t">Donate / quét mã QR</span><span class="go">→</span></a>
+    <a class="l" href="https://www.facebook.com/healerisme01/"><span class="ic f"><svg viewBox="0 0 24 24"><path d="M14 8V6.500c0-.7.200-1 1.200-1H17V2h-2.700C11.500 2 10 3.700 10 6v2H8v3.500h2V22h4v-10.500h2.700L17 8z"/></svg></span><span class="t">Facebook</span><span class="go">→</span></a>
+  </div>
+  <footer class="rise">© <b>Healer</b> · Cảm ơn bạn đã ghé thăm 💜</footer>
+</div>
 
 <div id="qr" class="qr" hidden>
   <div class="qr-box" role="dialog" aria-modal="true" aria-label="Mã QR donate">
@@ -86,52 +209,40 @@ footer{margin-top:36px;font-size:12px;color:var(--sub)}
     <div class="qr-tabs" id="qrt"></div>
     <img id="qri" alt="Mã QR">
     <p id="qrn"></p>
-   
-<a id="qrl" class="qr-link" href="#" target="_blank" rel="noopener" hidden>Mở link thanh toán →</a>
+    <a id="qrl" class="qr-link" href="#" target="_blank" rel="noopener" hidden>Mở link thanh toán →</a>
   </div>
 </div>
 
 <script>
-
-
 (function () {
   // ===== SỬA Ở ĐÂY: thêm/bớt mã QR của bạn =====
   var QR = [
-    { name: 'Ngân hàng',       img: 'stk.jpg',   },
-    { name: 'Zypage',  img: 'zypage.jpg', },
+    { name: 'Ngân hàng', img: 'stk.jpg' },
+    { name: 'Zypage',    img: 'zypage.jpg' },
     { name: 'Wescan',    note: 'Donate qua Wescan', link: 'https://wescan.vn/phanquochung19q', linkText: 'Mở link Wescan →' }
-   
   ];
   // ==============================================
-var lnk = document.getElementById('qrl');
-
-function show(i) {
-  var q = QR[i];
-
-  if (q.img) { img.src = q.img; img.style.display = ''; }
-  else { img.removeAttribute('src'); img.style.display = 'none'; }
-
-  note.textContent = q.note || '';
-
-  if (q.link) {
-    lnk.href = q.link;
-    lnk.textContent = q.linkText || 'Mở link thanh toán →';
-    lnk.hidden = false;
-  } else {
-    lnk.hidden = true;
+  var lnk = document.getElementById('qrl');
+  function show(i) {
+    var q = QR[i];
+    if (q.img) { img.src = q.img; img.style.display = ''; }
+    else { img.removeAttribute('src'); img.style.display = 'none'; }
+    note.textContent = q.note || '';
+    if (q.link) {
+      lnk.href = q.link;
+      lnk.textContent = q.linkText || 'Mở link thanh toán →';
+      lnk.hidden = false;
+    } else {
+      lnk.hidden = true;
+    }
+    [].forEach.call(tabs.children, function (b, k) {
+      b.className = k === i ? 'act' : '';
+    });
   }
-
-  [].forEach.call(tabs.children, function (b, k) {
-    b.className = k === i ? 'act' : '';
-  });
-}
-
   var m = document.getElementById('qr'),
       tabs = document.getElementById('qrt'),
       img = document.getElementById('qri'),
       note = document.getElementById('qrn');
-
-  
   QR.forEach(function (q, i) {
     var b = document.createElement('button');
     b.textContent = q.name;
@@ -139,17 +250,15 @@ function show(i) {
     tabs.appendChild(b);
   });
   if (QR.length < 2) tabs.style.display = 'none';
-
   function open(e) { e.preventDefault(); show(0); m.hidden = false; document.body.style.overflow = 'hidden'; }
   function close() { m.hidden = true; document.body.style.overflow = ''; }
-
   document.getElementById('donate').addEventListener('click', open);
   document.getElementById('qrx').addEventListener('click', close);
   m.addEventListener('click', function (e) { if (e.target === m) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 })();
-
 </script>
+
 <div id="bz" class="qr" hidden>
   <div class="qr-box" role="dialog" aria-modal="true" aria-label="Nhóm Zalo chung sức">
     <button class="qr-x" id="bzx" aria-label="Đóng">✕</button>
@@ -193,6 +302,21 @@ function show(i) {
   }
   bind('boxzalo', 'bz', 'bzx');
   bind('zalocn', 'zc', 'zcx');
+})();
+</script>
+<script>
+(function () {
+  var root = document.documentElement, b = document.getElementById('mb');
+  try {
+    var saved = localStorage.getItem('healer-theme');
+    if (saved) root.setAttribute('data-theme', saved);
+  } catch (e) {}
+  b.addEventListener('click', function () {
+    var isDark = (root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark';
+    var next = isDark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('healer-theme', next); } catch (e) {}
+  });
 })();
 </script>
 </body>
