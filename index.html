@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Làm chung sức ib zalo</title>
+<meta name="description" content="Liên hệ & theo dõi Healer tại đây: Zalo, YouTube, TikTok, Discord, Facebook, Donate">
+<meta name="theme-color" content="#6366f1">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 @property --ar{syntax:'<angle>';initial-value:0deg;inherits:false}
@@ -165,6 +167,25 @@ a.l:focus-visible{outline:2px solid var(--ac3);outline-offset:3px}
 .qr-link[hidden]{display:none}
 footer{margin-top:38px;font-size:12px;color:var(--sub);letter-spacing:.4px}
 footer b{background:linear-gradient(90deg,var(--ac1),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+/* ===== nút sao chép trong modal ===== */
+.copybtn{display:inline-block;margin:12px 4px 0;padding:10px 20px;border-radius:999px;
+  border:1px solid var(--bd);background:var(--card);color:var(--tx);
+  font:600 13px 'Be Vietnam Pro',sans-serif;cursor:pointer;transition:.2s}
+.copybtn:hover{border-color:var(--ac3);transform:translateY(-2px)}
+.copybtn:active{transform:scale(.97)}
+/* ===== huy hiệu đếm lượt bấm (chỉ hiện ở chế độ thống kê) ===== */
+.stat{position:absolute;left:50%;top:-11px;transform:translateX(-50%);z-index:2;
+  font-size:10px;font-weight:700;white-space:nowrap;color:#fff;
+  background:linear-gradient(135deg,var(--ac1),var(--ac2));
+  padding:4px 11px;border-radius:999px;box-shadow:0 4px 12px rgba(0,0,0,.25);display:none}
+body.stats .stat{display:block}
+body.stats .list{gap:22px}
+/* ===== toast ===== */
+#toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));z-index:70;
+  transform:translateX(-50%) translateY(16px);background:var(--tx);color:var(--bg1);
+  padding:11px 20px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:.3s;box-shadow:0 10px 26px rgba(0,0,0,.3)}
+#toast.show{opacity:1;transform:translateX(-50%)}
 </style>
 </head>
 <body>
@@ -186,7 +207,7 @@ footer b{background:linear-gradient(90deg,var(--ac1),var(--ac2));-webkit-backgro
     </svg>
   </div>
   <div class="rise d2"><span class="badge"><i></i>Liên Quân Mobile · Chung Sức</span></div>
-  <h1 class="rise d2">Làm chung sức nhắn tin zalo</h1>
+  <h1 class="rise d2">Làm chung sức ib zalo</h1>
   <p class="s rise d3">Liên hệ &amp; theo dõi mình tại đây 👇</p>
   <div class="list">
     <a class="l" href="#" id="boxzalo"><span class="ic z"><b class="zt">Zalo</b></span><span class="t">Box zalo chung sức</span><span class="go">→</span></a>
@@ -266,6 +287,7 @@ footer b{background:linear-gradient(90deg,var(--ac1),var(--ac2));-webkit-backgro
     <img src="zalo-nhom.jpg" alt="Mã QR nhóm Zalo">
     <p>Quét mã QR hoặc bấm nút bên dưới để vào nhóm</p>
     <a class="qr-link" href="https://zalo.me/g/2xjxoy8mgfkfj6fspkwg" rel="noopener">Tham gia nhóm Zalo →</a>
+    <br><button class="copybtn" data-copy="https://zalo.me/g/2xjxoy8mgfkfj6fspkwg">Sao chép link nhóm</button>
   </div>
 </div>
 <script>
@@ -287,6 +309,7 @@ footer b{background:linear-gradient(90deg,var(--ac1),var(--ac2));-webkit-backgro
     <img src="zalo-ca-nhan.jpg" alt="Mã QR Zalo">
     <p>Quét mã QR hoặc bấm nút bên dưới để nhắn tin</p>
     <a class="qr-link" href="https://zalo.me/0366822535" rel="noopener">Nhắn tin Zalo →</a>
+    <br><button class="copybtn" data-copy="0366822535">Sao chép số Zalo</button>
   </div>
 </div>
 <script>
@@ -317,6 +340,70 @@ footer b{background:linear-gradient(90deg,var(--ac1),var(--ac2));-webkit-backgro
     root.setAttribute('data-theme', next);
     try { localStorage.setItem('healer-theme', next); } catch (e) {}
   });
+})();
+</script>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+(function () {
+  /* ---------- toast ---------- */
+  var toastEl = document.getElementById('toast');
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastEl._h);
+    toastEl._h = setTimeout(function () { toastEl.classList.remove('show'); }, 1800);
+  }
+  /* ---------- sao chép ---------- */
+  function copyText(s, msg) {
+    function done() { toast(msg || 'Đã sao chép ✓'); }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = s; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) { toast('Không sao chép được'); }
+      ta.remove();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(s).then(done, fallback);
+    } else { fallback(); }
+  }
+  document.querySelectorAll('.copybtn').forEach(function (b) {
+    b.addEventListener('click', function () { copyText(b.getAttribute('data-copy')); });
+  });
+  /* ---------- đếm lượt bấm (ẩn, chỉ hiện ở chế độ thống kê) ---------- */
+  var CK = 'healer-clicks-v1';
+  function getCounts() { try { return JSON.parse(localStorage.getItem(CK)) || {}; } catch (e) { return {}; } }
+  function refreshStats() {
+    var c = getCounts();
+    document.querySelectorAll('.stat').forEach(function (s) {
+      var n = c[s.getAttribute('data-for')] || 0;
+      s.textContent = n + ' lượt bấm';
+    });
+  }
+  document.querySelectorAll('a.l').forEach(function (a, i) {
+    var id = a.id || ('link' + i);
+    var badge = document.createElement('span');
+    badge.className = 'stat'; badge.setAttribute('data-for', id);
+    a.appendChild(badge);
+    a.addEventListener('click', function () {
+      var c = getCounts(); c[id] = (c[id] || 0) + 1;
+      try { localStorage.setItem(CK, JSON.stringify(c)); } catch (e) {}
+      refreshStats();
+    });
+  });
+  refreshStats();
+  var taps = 0, lastTap = 0;
+  document.querySelector('footer').addEventListener('click', function () {
+    var now = Date.now();
+    taps = (now - lastTap < 2000) ? taps + 1 : 1; lastTap = now;
+    if (taps >= 5) {
+      taps = 0;
+      var on = document.body.classList.toggle('stats');
+      refreshStats();
+      toast(on ? 'Đã bật xem thống kê lượt bấm' : 'Đã tắt xem thống kê');
+    }
+  });
+  if (location.hash === '#stats') { document.body.classList.add('stats'); refreshStats(); }
 })();
 </script>
 </body>
